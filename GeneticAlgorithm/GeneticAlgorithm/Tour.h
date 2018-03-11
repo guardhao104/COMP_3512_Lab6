@@ -38,7 +38,7 @@ public:
 			permutation[i] = (orgtour.permutation[i]);
 		}
 	}
-	//~Tour() { delete permutation; };
+	//~Tour() { delete[] permutation; };
 	double get_distance() const { return distance; };
 	int get_city_number() const { return city_number; };
 

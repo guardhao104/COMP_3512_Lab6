@@ -29,7 +29,7 @@ public:
 			tour_list[i] = orgpopulation.tour_list[i];
 		}
 	}
-	//~Population() { delete tour_list; };
+	//~Population() { delete[] tour_list; };
 	void init_generation() { generation = 1; };
 	int get_generation() const { return generation; };
 	void add_generation() { ++generation; };
@@ -178,36 +178,3 @@ public:
 		}
 	}
 };
-
-	//Make new tour by combo with anohter tour.
-	//PARAM		another tour that give first part of cities
-	//PRE		two tours should have same size on cities
-	//POST		NULL
-	//RETURN	a new tour as a child of two tours
-	/*
-	Tour make_child(const Tour& parent_one, const Tour& parent_two) const
-	{
-		Tour child = Tour(city_number, permutation);
-		int boundary_index = rand() % city_number;
-		for (int i = boundary_index; i < city_number; ++i)
-		{
-			int index = 0;
-			int flag = 1;
-			while (flag)
-			{
-				flag = 0;
-				for (int j = 0; j < i; ++j)
-				{
-					if (companion.permutation[index] == child.permutation[j])
-					{
-						++index;
-						flag = 1;
-						break;
-					}
-				}
-			}
-			child.permutation[i] = companion.permutation[index];
-		}
-		child.update_distance();
-	}
-	*/
