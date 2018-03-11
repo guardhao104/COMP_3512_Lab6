@@ -3,8 +3,8 @@
 #include <ctime>
 #include <iomanip>
 
-#define CITIES_IN_TOUR 20
-#define POPULATION_SIZE 30
+#define CITIES_IN_TOUR	  20
+#define POPULATION_SIZE	  30
 #define MAP_BOUNDARY      1000    // Size of the map (X and Y)
 #define SHUFFLES          32      // A shuffle consists of swaps
 
@@ -47,7 +47,8 @@ int main()
 	cout << setw(8) << fixed << setprecision(3) << best_distance << endl;
 
 	/* Loop for doing algorithm. */
-	for (int iterations = 0; iterations < ITERATIONS; ++iterations) {
+	while (population.get_generation() < ITERATIONS) 
+	{
 		population.make_new_generation(NUMBER_OF_ELITES, PARENT_POOL_SIZE, MUTATION_RATE);
 		best_tour = population.determine_shortest();
 		if (best_distance != best_tour.get_distance())

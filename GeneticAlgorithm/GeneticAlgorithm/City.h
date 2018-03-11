@@ -10,7 +10,7 @@ private:
 public:
 	City() : name("unknown"), x_coordinate(0), y_coordinate(0) {};
 	City(std::string cname, int x, int y) : name(cname), x_coordinate(x), y_coordinate(y) {};
-	City(City& org_city) : name(org_city.name), x_coordinate(org_city.x_coordinate), 
+	City(const City& org_city) : name(org_city.name), x_coordinate(org_city.x_coordinate), 
 						   y_coordinate(org_city.y_coordinate) {};
 	~City() {};
 	void set_name(std::string newname) { name = newname; };
@@ -23,13 +23,13 @@ public:
 
 	// Calculate the distance between two cities.
 	// PARAM	other_city is another city which we want to know the distance from this city to.
-	// PRE		other_city should have valid x and y.
+	// PRE		two cities should have valid x and y.
 	// POST		NULL
 	// RETURN	the distance between two cities
 	double distance(const City& other_city) const
 	{
-		double quadratic_x = std::pow((double)(x_coordinate - other_city.get_x()), 2.0);
-		double quadratic_y = std::pow((double)(y_coordinate - other_city.get_y()), 2.0);
+		double quadratic_x = std::pow((double)(x_coordinate - other_city.x_coordinate), 2.0);
+		double quadratic_y = std::pow((double)(y_coordinate - other_city.y_coordinate), 2.0);
 		return std::sqrt(quadratic_x + quadratic_y);
 	}
 

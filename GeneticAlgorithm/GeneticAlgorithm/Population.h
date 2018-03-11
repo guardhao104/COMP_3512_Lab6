@@ -9,7 +9,7 @@ private:
 	Tour *tour_list;
 public:
 	Population() : population_size(0) {};
-	Population(int size, Tour tour, int shuffle_times)
+	Population(int size, Tour& tour, int shuffle_times)
 	{
 		init_generation();
 		population_size = size;
@@ -68,7 +68,7 @@ public:
 	//PRE		NULL
 	//POST		the shortest tour will be moved to the first position
 	//RETURN	the shortest tour in the population
-	Tour determine_shortest()
+	Tour& determine_shortest()
 	{
 		int index = 0;
 		double shortest_distance = tour_list[index].get_distance();
@@ -88,23 +88,23 @@ public:
 	}
 
 	//Find which tour has the shortest distance in a specified range.
-	//PRE		range > 0
-	//PRE		range should be the size of tour_range[]
+	//PRE		range number > 0
+	//PRE		range number should be the size of index_range[]
 	//POST		NULL
-	//RETURN	the shortest tour in the specified range
-	Tour find_shortest(int range, Tour tour_range[]) const
+	//RETURN	index of the shortest tour in the specified range
+	int find_shortest_index(int number, int index_range[]) const
 	{
 		int index = 0;
-		double shortest_distance = tour_range[index].get_distance();
-		for (int i = 1; i < range; ++i)
+		double shortest_distance = tour_list[index_range[index]].get_distance();
+		for (int i = 1; i < number; ++i)
 		{
-			if (tour_range[i].get_distance() < shortest_distance)
+			if (tour_list[index_range[i]].get_distance() < shortest_distance)
 			{
 				index = i;
-				shortest_distance = tour_range[i].get_distance();
+				shortest_distance = tour_list[index_range[i]].get_distance();
 			}
 		}
-		return tour_range[index];
+		return index_range[index];
 	}
 
 	//Select a parent by randomly choose tours and find the shortest one in this range.
@@ -112,17 +112,17 @@ public:
 	//PRE		size < population_size
 	//POST		NULL
 	//RETURN	the shortest tour in specified range
-	Tour select_parent(int size) const
+	Tour& select_parent(int size) const
 	{
-		Tour *candidate = new Tour[size];
+		int *candidate_index = new int[size];
 		for (int i = 0; i < size; ++i)
 		{
 			int k = rand() % population_size;
-			candidate[i] = tour_list[k];
+			candidate_index[i] = k;
 		}
-		Tour shortest = find_shortest(size, candidate);
-		delete candidate;
-		return shortest;
+		int shortest_index = find_shortest_index(size, candidate_index);
+		delete candidate_index;
+		return tour_list[shortest_index];
 	}
 
 	//Make a new generation as follow steps:
@@ -142,17 +142,26 @@ public:
 	//PRE		parent_pool_size > 0
 	//PRE		mutation_rate > 0
 	//POST		generation will add one
-	//POST		tour_list will change to new list and keep elites without edit
+	//POST		tour_list will change to new list and keep elites without editting
 	void make_new_generation(int elites, int parent_pool_size, double mutation_rate)
 	{
 		add_generation();
 
-		for (int i = elites; i < population_size; ++i)
+		Tour *child = new Tour[population_size - elites];
+
+		for (int i = 0; i < population_size - elites; ++i)
 		{
 			Tour parent_one = select_parent(parent_pool_size);
 			Tour parent_two = select_parent(parent_pool_size);
-			tour_list[i] = parent_two.make_child(parent_one);
+			child[i] = parent_one.make_child(parent_two);
 		}
+
+		for (int i = elites; i < population_size; ++i)
+		{
+			tour_list[i] = child[i - elites];
+		}
+
+		delete child;
 
 		for (int i = elites; i < population_size; ++i)
 		{
@@ -169,3 +178,36 @@ public:
 		}
 	}
 };
+
+	//Make new tour by combo with anohter tour.
+	//PARAM		another tour that give first part of cities
+	//PRE		two tours should have same size on cities
+	//POST		NULL
+	//RETURN	a new tour as a child of two tours
+	/*
+	Tour make_child(const Tour& parent_one, const Tour& parent_two) const
+	{
+		Tour child = Tour(city_number, permutation);
+		int boundary_index = rand() % city_number;
+		for (int i = boundary_index; i < city_number; ++i)
+		{
+			int index = 0;
+			int flag = 1;
+			while (flag)
+			{
+				flag = 0;
+				for (int j = 0; j < i; ++j)
+				{
+					if (companion.permutation[index] == child.permutation[j])
+					{
+						++index;
+						flag = 1;
+						break;
+					}
+				}
+			}
+			child.permutation[i] = companion.permutation[index];
+		}
+		child.update_distance();
+	}
+	*/

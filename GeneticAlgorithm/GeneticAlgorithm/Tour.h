@@ -18,6 +18,16 @@ public:
 		}
 		update_distance();
 	};
+	Tour(int citys, City* city_permutation[])
+	{
+		city_number = citys;
+		permutation = new City*[city_number];
+		for (int i = 0; i < city_number; ++i)
+		{
+			permutation[i] = city_permutation[i];
+		}
+		update_distance();
+	}
 	Tour(const Tour& orgtour)
 	{
 		distance = orgtour.distance;
@@ -25,10 +35,10 @@ public:
 		permutation = new City*[city_number];
 		for (int i = 0; i < city_number; ++i)
 		{
-			permutation[i] = orgtour.permutation[i];
+			permutation[i] = (orgtour.permutation[i]);
 		}
 	}
-	~Tour() { delete permutation; };
+	//~Tour() { delete permutation; };
 	double get_distance() const { return distance; };
 	int get_city_number() const { return city_number; };
 
@@ -78,9 +88,9 @@ public:
 	//PRE		two tours should have same size on cities
 	//POST		NULL
 	//RETURN	a new tour as a child of two tours
-	Tour make_child(Tour companion) const
+	Tour make_child(const Tour& companion) const
 	{
-		Tour child = companion;
+		Tour child = Tour(city_number, permutation);
 		int boundary_index = rand() % city_number;
 		for (int i = boundary_index; i < city_number; ++i)
 		{
@@ -91,7 +101,7 @@ public:
 				flag = 0;
 				for (int j = 0; j < i; ++j)
 				{
-					if (permutation[index] == child.permutation[j])
+					if (companion.permutation[index] == child.permutation[j])
 					{
 						++index;
 						flag = 1;
@@ -99,7 +109,7 @@ public:
 					}
 				}
 			}
-			child.permutation[i] = permutation[index];
+			child.permutation[i] = companion.permutation[index];
 		}
 		child.update_distance();
 		return child;
