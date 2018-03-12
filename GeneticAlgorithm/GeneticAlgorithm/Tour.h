@@ -39,8 +39,26 @@ public:
 		}
 	}
 	//~Tour() { delete[] permutation; };
+	/*
+	~Tour()
+	{
+		for (int i = 0; i < city_number; ++i)
+		{
+			delete[] permutation[i];
+		}
+		delete[] permutation;
+	}
+	*/
 	double get_distance() const { return distance; };
 	int get_city_number() const { return city_number; };
+	Tour& operator=(Tour src)
+	{
+		using std::swap;
+		swap(distance, src.distance);
+		swap(city_number, src.city_number);
+		swap(permutation, src.permutation);
+		return *this;
+	}
 
 	//Calculate the total distance traveled on the specified tour of cities.
 	//PRE		permutation should contains a set of city_number cities
