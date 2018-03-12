@@ -30,6 +30,10 @@ public:
 		}
 	}
 	~Population() { delete[] tour_list; };
+	void init_generation() { generation = 1; };
+	int get_generation() const { return generation; };
+	void add_generation() { ++generation; };
+	Tour *get_tour() const { return tour_list; };
 	Population& operator=(Population src)
 	{
 		using std::swap;
@@ -38,10 +42,6 @@ public:
 		swap(tour_list, src.tour_list);
 		return *this;
 	}
-	void init_generation() { generation = 1; };
-	int get_generation() const { return generation; };
-	void add_generation() { ++generation; };
-	Tour *get_tour() const { return tour_list; };
 	void set_tour(Tour list[]) 
 	{
 		for (int i = 0; i < population_size; ++i)

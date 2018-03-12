@@ -7,7 +7,10 @@ private:
 	int city_number;
 	City **permutation;
 public:
-	Tour() : distance(0), city_number(0) {};
+	Tour() : distance(0), city_number(0)
+	{
+		permutation = new City*[0];
+	};
 	Tour(int citys, City city_permutation[])
 	{
 		city_number = citys;
@@ -38,17 +41,7 @@ public:
 			permutation[i] = (orgtour.permutation[i]);
 		}
 	}
-	//~Tour() { delete[] permutation; };
-	/*
-	~Tour()
-	{
-		for (int i = 0; i < city_number; ++i)
-		{
-			delete[] permutation[i];
-		}
-		delete[] permutation;
-	}
-	*/
+	~Tour() { delete[] permutation; };
 	double get_distance() const { return distance; };
 	int get_city_number() const { return city_number; };
 	Tour& operator=(Tour src)
