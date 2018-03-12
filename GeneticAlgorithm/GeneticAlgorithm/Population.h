@@ -29,7 +29,15 @@ public:
 			tour_list[i] = orgpopulation.tour_list[i];
 		}
 	}
-	//~Population() { delete[] tour_list; };
+	~Population() { delete[] tour_list; };
+	Population& operator=(Population src)
+	{
+		using std::swap;
+		swap(generation, src.generation);
+		swap(population_size, src.population_size);
+		swap(tour_list, src.tour_list);
+		return *this;
+	}
 	void init_generation() { generation = 1; };
 	int get_generation() const { return generation; };
 	void add_generation() { ++generation; };
@@ -121,7 +129,7 @@ public:
 			candidate_index[i] = k;
 		}
 		int shortest_index = find_shortest_index(size, candidate_index);
-		delete candidate_index;
+		delete[] candidate_index;
 		return tour_list[shortest_index];
 	}
 
@@ -161,7 +169,7 @@ public:
 			tour_list[i] = child[i - elites];
 		}
 
-		delete child;
+		delete[] child;
 
 		for (int i = elites; i < population_size; ++i)
 		{
